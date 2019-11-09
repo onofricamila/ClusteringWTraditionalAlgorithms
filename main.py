@@ -5,7 +5,7 @@ from scipy.spatial.distance import euclidean
 import collections
 from DBCV.validity import validity_index
 from sklearn.preprocessing import StandardScaler
-from datasets import datasets
+from data import datasets
 # set matplotlib backend to Qt5Agg to make figure window maximizer work
 import matplotlib
 matplotlib.use('Qt5Agg')
