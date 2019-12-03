@@ -30,7 +30,7 @@ cols = len(algorithms)
 fig, axes = plt.subplots(nrows=rows, ncols=cols, sharex=True, sharey=True)
 
 # iterate over the data sets
-for r in range(rows):  #row index
+for r in range(rows):  # row index
     # iterate over the algorithms
     for c in range(cols):  # column index
         X, y = datasets[r]
