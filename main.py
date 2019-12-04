@@ -4,7 +4,7 @@ from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import StandardScaler
 
 from config import getClusteringResultsPath, getNonTimeSeriesDatasetsPath, getmKMeansName, getDbscanName
-from utils.ndarraysFormCsvsGenerator import getDatasetsFromFolder
+from utils.datasets_fetcher import getDatasetsFromFolder
 from utils.persistor import resetStorage, storeResult, storeAlgoConfig
 import numpy as np
 
