@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 
 from config import getClusteringResultsPath, getNonTimeSeriesDatasetsPath, getmKMeansName, getDbscanName
 from utils.ndarraysFormCsvsGenerator import getDatasetsFromFolder
-from utils.persistor import resetStorage
+from utils.persistor import resetStorage, storeResult, storeAlgoConfig
 import numpy as np
 
 # shows clustering info
@@ -38,14 +38,20 @@ for datIndx in range(len(non_time_series_datasets)):  # row index
         # normalize dataset for easier parameter selection
         algo = algorithms[algIndx][1]
         algoName = algorithms[algIndx][0]
-        if algoName == 'KMeans':
+        # if the algorithm is 'kmeans', k must be set specifically for the data set
+        if algoName.lower() == 'kmeans':
             algo.set_params(n_clusters=k)
+        # assign labels
         labels = algo.fit_predict(X)
         print("  " ,len(set(labels)), " clusters")
         clusteringInfo(labels)
-        # FIXME: see if result actaully contains every point with the label ... should it be the transformed point right?
+        # result contains every scaled element with the corresponding label
         result = np.c_[X,labels]
-        # TODO: store result
-        # TODO: store algo config
+        # store result
+        folder = baseFolder + algoName + '/'
+        storeResult(result, folder)
+        # store algo config
+        paramsDict = algo.get_params()
+        storeAlgoConfig(paramsDict, folder)
         print("\n")
 
