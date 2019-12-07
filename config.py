@@ -1,77 +1,54 @@
 import json
 
-csvDatasetsPath = None
-timeSeriesDatasetsPath = None
-nonTimeSeriesDatasetsPath = None
+paths = None
 algoNames = None
-clusteringResultsPath = None
 
-def fetchConfig():
+def _getPaths():
+    return paths
+
+
+def _getAlgoNames():
+    return algoNames
+
+
+def _fetchConfig():
     # we use the global key word to being able to change the values of the variables declared outside the function
-    global csvDatasetsPath
-    global timeSeriesDatasetsPath
-    global nonTimeSeriesDatasetsPath
-    global clusteringResultsPath
+    global paths
     global algoNames
 
     configFilePath = "/home/camila/Desktop/TESIS/DATA/config.json"
     with open(configFilePath) as f:
         data = json.load(f)
     # fill variables
-    clusteringResultsPath = data.get("clusteringResultsPath")
-    csvDatasetsPath = data.get("csvDatasetsPath")
-    timeSeriesDatasetsPath = data.get("timeSeriesDatasetsPath")
-    nonTimeSeriesDatasetsPath = data.get("nonTimeSeriesDatasetsPath")
+    paths = data.get("paths")
     algoNames = data.get("algoNames")
 
 
-def getCsvDatasetsPath():
-    if csvDatasetsPath is not None:
-        return csvDatasetsPath
+def _fetchElementIfNull(_getter):
+    element = _getter()
+    if (element != None):
+        return element
     # else
-    fetchConfig()
-    return csvDatasetsPath
+    _fetchConfig()
+    return _getter()
 
 
-def getClusteringResultsPath():
-    if clusteringResultsPath is not None:
-        return clusteringResultsPath
-    # else
-    fetchConfig()
-    return clusteringResultsPath
+def _getElementFromDict(key, _getter):
+    dict = _fetchElementIfNull(_getter)
+    return dict.get(key)
 
 
 def getNonTimeSeriesDatasetsPath():
-    if nonTimeSeriesDatasetsPath is not None:
-        return nonTimeSeriesDatasetsPath
-    # else
-    fetchConfig()
-    return nonTimeSeriesDatasetsPath
+    return _getElementFromDict(key="nonTimeSeriesDatasetsPath", _getter=_getPaths)
 
 
-def getTimeSeriesDatasetsPath():
-    if timeSeriesDatasetsPath is not None:
-        return timeSeriesDatasetsPath
-    # else
-    fetchConfig()
-    return timeSeriesDatasetsPath
+def getClusteringResultsPath():
+    return _getElementFromDict(key="clusteringResultsPath", _getter=_getPaths)
 
 
 def getmKMeansName():
-    key = "kmeans"
-    kmeansName = algoNames.get(key)
-    if (kmeansName != None):
-        return kmeansName
-    # else
-    fetchConfig()
-    return algoNames.get(key)
+    return _getElementFromDict(key="kmeans", _getter=_getAlgoNames)
 
 
 def getDbscanName():
-    key = "dbscan"
-    dbscanName = algoNames.get(key)
-    if (dbscanName != None):
-        return dbscanName
-    # else
-    fetchConfig()
-    return algoNames.get(key)
+    return _getElementFromDict(key="dbscan", _getter=_getAlgoNames)
