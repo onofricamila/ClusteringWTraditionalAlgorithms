@@ -27,7 +27,7 @@ def getDatasetsFromFolder(resourcesFolder):
             # if 'k' is not specified, do not skip the first row!
             skip_header=0
         # get the data
-        ndarray = np.genfromtxt(filePath, delimiter=",", skip_header=skip_header) # header must be skipped
+        ndarray = np.genfromtxt(filePath, delimiter=",", skip_header=skip_header)
         fileNameWithoutExtension = fileFullName.split(".")[0]
         # append info to datasets
         datasets.append({

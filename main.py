@@ -1,8 +1,6 @@
 import collections
-
 from sklearn.cluster import KMeans, DBSCAN
 from sklearn.preprocessing import StandardScaler
-
 from config import getClusteringResultsPath, getNonTimeSeriesDatasetsPath, getmKMeansName, getDbscanName
 from utils.datasets_fetcher import getDatasetsFromFolder
 from utils.persistor import resetStorage, storeResult, storeAlgoConfig
@@ -20,8 +18,8 @@ def clusteringInfo(labels):
 non_time_series_datasets = getDatasetsFromFolder(getNonTimeSeriesDatasetsPath())
 
 # clustering algorithms
-kmeans =  KMeans(n_clusters=3)
-dbscan = DBSCAN(eps=0.2, min_samples=5)
+kmeans =  KMeans()
+dbscan = DBSCAN(eps=0.25, min_samples=10)
 algorithms = [(getmKMeansName(), kmeans),
               (getDbscanName(), dbscan)]
 
@@ -32,10 +30,10 @@ for datIndx in range(len(non_time_series_datasets)):  # row index
     k = non_time_series_datasets[datIndx]['k']
     baseFolder = getClusteringResultsPath() + dName + '/'
     resetStorage(baseFolder)
+    # normalize dataset for easier parameter selection
     X = StandardScaler().fit_transform(X)
     # iterate over the algorithms
     for algIndx in range(len(algorithms)):  # column index
-        # normalize dataset for easier parameter selection
         algo = algorithms[algIndx][1]
         algoName = algorithms[algIndx][0]
         # if the algorithm is 'kmeans', k must be set specifically for the data set
